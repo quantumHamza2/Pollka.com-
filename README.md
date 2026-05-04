@@ -80,13 +80,6 @@ python main.py
 npm install
 npm run dev
 ```
-
----
-
-### 4. Open in Browser
-
-http://localhost:5173
-
 ---
 
 ## 🔌 API Endpoints
