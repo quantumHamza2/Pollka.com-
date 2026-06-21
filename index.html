@@ -1,208 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Pollka.com — Elective Polling</title>
+<title>Pollka.com — Create & Vote on Polls</title>
+<meta name="description" content="Pollka.com — The ultimate polling platform. Create polls, vote, and see real-time results."/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --blue: #2563EB; --blue-hover: #1d4ed8; --blue-light: #eff6ff;
-    --green: #16a34a; --green-light: #dcfce7;
-    --red: #dc2626; --red-light: #fef2f2;
-    --orange: #c2410c; --orange-light: #fff7ed;
-    --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
-    --gray-300: #cbd5e1; --gray-400: #94a3b8; --gray-500: #64748b;
-    --gray-600: #475569; --gray-700: #334155; --gray-900: #0f172a;
-    --white: #ffffff;
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
-    --radius: 12px; --radius-sm: 8px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; }
-  .page { display: none; min-height: 100vh; }
-  .page.active { display: flex; flex-direction: column; }
+:root{
+  --blue:#2563EB;--blue-hover:#1d4ed8;--blue-light:#eff6ff;
+  --green:#16a34a;--green-light:#dcfce7;
+  --red:#dc2626;--red-light:#fef2f2;
+  --orange:#c2410c;--orange-light:#fff7ed;
+  --purple:#7c3aed;--purple-light:#f5f3ff;
+  --gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;
+  --gray-300:#cbd5e1;--gray-400:#94a3b8;--gray-500:#64748b;
+  --gray-600:#475569;--gray-700:#334155;--gray-900:#0f172a;
+  --white:#ffffff;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.10);
+  --radius:12px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray-900);min-height:100vh}
 
-  #page-login { background: linear-gradient(135deg, #e8f0fe 0%, #f0f4ff 40%, #e8f4fd 100%); align-items: center; justify-content: center; flex-direction: column; gap: 24px; }
-  .login-logo { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 700; color: var(--gray-900); }
-  .login-logo svg { color: var(--blue); }
-  .login-card { background: var(--white); border-radius: 16px; padding: 36px; width: 420px; box-shadow: var(--shadow-lg); }
-  .tab-bar { display: flex; background: var(--gray-100); border-radius: 10px; padding: 4px; margin-bottom: 28px; gap: 2px; }
-  .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--gray-500); cursor: pointer; transition: all 0.2s; }
-  .tab-btn.active { background: var(--white); color: var(--gray-900); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-  .login-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 6px; }
-  .login-sub { font-size: 14px; color: var(--gray-500); text-align: center; margin-bottom: 24px; }
-  .form-group { margin-bottom: 16px; }
-  .form-label { display: block; font-size: 14px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
-  .form-input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--gray-900); background: var(--gray-50); outline: none; transition: border-color 0.2s; }
-  .form-input:focus { border-color: var(--blue); background: var(--white); }
-  .form-input::placeholder { color: var(--gray-400); }
-  .btn-primary { width: 100%; padding: 13px; background: var(--blue); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; transition: background 0.2s; }
-  .btn-primary:hover { background: var(--blue-hover); }
-  .demo-hint { margin-top: 20px; padding: 12px 16px; background: var(--gray-50); border-radius: var(--radius-sm); font-size: 13px; color: var(--gray-500); text-align: center; border: 1px solid var(--gray-200); }
-  .demo-hint code { font-family: 'DM Mono', monospace; background: var(--gray-200); padding: 2px 6px; border-radius: 4px; font-size: 12px; color: var(--gray-700); }
-  .back-link { font-size: 14px; font-weight: 600; color: var(--gray-600); cursor: pointer; }
-  .error-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 16px; display: none; }
+/* PAGES */
+.page{display:none;min-height:100vh}
+.page.active{display:flex;flex-direction:column}
 
-  .navbar { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 0 40px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; color: var(--gray-900); }
-  .nav-logo svg { color: var(--blue); }
-  .nav-logo-badge { font-size: 12px; font-weight: 600; padding: 3px 8px; background: var(--blue-light); color: var(--blue); border-radius: 6px; margin-left: 4px; }
-  .nav-action { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); background: var(--white); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--gray-700); cursor: pointer; transition: all 0.2s; }
-  .nav-action:hover { background: var(--gray-50); }
+/* LOGIN / REGISTER */
+#page-login,#page-register{background:linear-gradient(135deg,#e8f0fe 0%,#f0f4ff 40%,#e8f4fd 100%);align-items:center;justify-content:center;flex-direction:column;gap:24px}
+.login-logo{display:flex;align-items:center;gap:10px;font-size:28px;font-weight:700;color:var(--gray-900);letter-spacing:-0.5px}
+.login-logo svg{color:var(--blue)}
+.login-card{background:var(--white);border-radius:16px;padding:36px;width:420px;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,0.8)}
+.tab-bar{display:flex;background:var(--gray-100);border-radius:10px;padding:4px;margin-bottom:28px;gap:2px}
+.tab-btn{flex:1;padding:10px;border:none;background:transparent;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;color:var(--gray-500);cursor:pointer;transition:all 0.2s}
+.tab-btn.active{background:var(--white);color:var(--gray-900);box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+.login-title{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:6px;text-align:center}
+.login-sub{font-size:14px;color:var(--gray-500);text-align:center;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:14px;font-weight:500;color:var(--gray-700);margin-bottom:6px}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--gray-900);background:var(--gray-50);outline:none;transition:border-color 0.2s}
+.form-input:focus{border-color:var(--blue);background:var(--white)}
+.form-input::placeholder{color:var(--gray-400)}
+textarea.form-input{resize:vertical;min-height:80px}
+.btn-primary{width:100%;padding:13px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s,transform 0.1s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.btn-primary:hover{background:var(--blue-hover)}
+.btn-primary:active{transform:scale(0.99)}
+.btn-primary:disabled{background:var(--gray-300);cursor:not-allowed}
+.demo-hint{margin-top:20px;padding:12px 16px;background:var(--gray-50);border-radius:var(--radius-sm);font-size:13px;color:var(--gray-500);text-align:center;border:1px solid var(--gray-200)}
+.demo-hint code{font-family:'DM Mono',monospace;background:var(--gray-200);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--gray-700)}
+.link-text{font-size:14px;color:var(--blue);cursor:pointer;text-decoration:none;font-weight:500;text-align:center;display:block;margin-top:16px}
+.link-text:hover{text-decoration:underline}
+.error-msg{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-bottom:16px;display:none}
 
-  .main-content { flex: 1; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
-  .page-title { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
-  .cgpa-line { font-size: 15px; color: var(--gray-500); margin-top: 4px; }
-  .cgpa-val { color: var(--blue); font-weight: 700; }
-  .status-badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; background: var(--green-light); color: var(--green); border-radius: 99px; font-size: 13px; font-weight: 600; margin-top: 16px; }
-  .status-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+/* NAVBAR */
+.navbar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;color:var(--gray-900);letter-spacing:-0.3px;cursor:pointer}
+.nav-logo svg{color:var(--blue)}
+.nav-logo-badge{font-size:12px;font-weight:600;padding:3px 8px;background:var(--blue-light);color:var(--blue);border-radius:6px;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-user{font-size:14px;font-weight:500;color:var(--gray-600)}
+.nav-action{display:flex;align-items:center;gap:8px;padding:8px 16px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--gray-700);cursor:pointer;transition:all 0.2s}
+.nav-action:hover{background:var(--gray-50);border-color:var(--gray-300)}
 
-  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
-  .admin-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 24px; }
-  .action-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 28px; cursor: pointer; transition: all 0.2s; }
-  .action-card:hover { border-color: var(--blue); box-shadow: 0 4px 20px rgba(37,99,235,0.1); transform: translateY(-2px); }
-  .card-icon { width: 44px; height: 44px; background: var(--blue-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--blue); }
-  .card-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-  .card-desc { font-size: 14px; color: var(--gray-500); line-height: 1.5; }
+/* LAYOUT */
+.main-content{flex:1;padding:40px;max-width:1200px;margin:0 auto;width:100%}
+.page-title{font-size:28px;font-weight:700;color:var(--gray-900);letter-spacing:-0.5px}
+.page-sub{font-size:15px;color:var(--gray-500);margin-top:4px}
+.page-header{margin-bottom:28px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.page-header-left h1{font-size:26px;font-weight:700;color:var(--gray-900);letter-spacing:-0.4px}
+.page-header-left p{font-size:14px;color:var(--gray-500);margin-top:4px}
 
-  .info-box { background: var(--gray-100); border-radius: var(--radius); padding: 24px 28px; margin-top: 28px; }
-  .info-box-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
-  .info-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .info-list li { font-size: 14px; color: var(--gray-600); display: flex; gap: 8px; }
-  .info-list li span.num { font-weight: 700; color: var(--gray-900); min-width: 18px; }
+/* CARDS GRID */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px}
+.cards-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:24px}
+.action-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:28px;cursor:pointer;transition:all 0.2s}
+.action-card:hover{border-color:var(--blue);box-shadow:0 4px 20px rgba(37,99,235,0.1);transform:translateY(-2px)}
+.card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.card-icon.blue{background:var(--blue-light);color:var(--blue)}
+.card-icon.purple{background:var(--purple-light);color:var(--purple)}
+.card-icon.green{background:var(--green-light);color:var(--green)}
+.card-icon.orange{background:var(--orange-light);color:var(--orange)}
+.card-title{font-size:17px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.card-desc{font-size:14px;color:var(--gray-500);line-height:1.5}
 
-  .page-header { margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; }
-  .page-header-left h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.4px; }
-  .page-header-left p { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
+/* POLL CARDS */
+.poll-feed{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:24px}
+.poll-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:24px;transition:all 0.2s;cursor:pointer}
+.poll-card:hover{border-color:var(--blue);box-shadow:0 4px 20px rgba(37,99,235,0.08);transform:translateY(-1px)}
+.poll-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.poll-card-title{font-size:17px;font-weight:700;color:var(--gray-900);line-height:1.4}
+.poll-card-desc{font-size:13px;color:var(--gray-500);margin-bottom:16px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.poll-card-meta{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--gray-400)}
+.poll-card-meta span{display:flex;align-items:center;gap:4px}
+.poll-type-badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:0.3px}
+.poll-type-badge.single{background:var(--blue-light);color:var(--blue)}
+.poll-type-badge.multiple{background:var(--purple-light);color:var(--purple)}
+.poll-type-badge.ranked{background:var(--orange-light);color:var(--orange)}
+.poll-status-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.poll-status-dot.active{background:var(--green);animation:pulse 2s infinite}
+.poll-status-dot.closed{background:var(--gray-400)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  .table-wrap { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: var(--gray-50); border-bottom: 1.5px solid var(--gray-200); }
-  th { padding: 14px 20px; text-align: left; font-size: 13px; font-weight: 600; color: var(--gray-500); }
-  td { padding: 16px 20px; font-size: 14px; color: var(--gray-700); border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: var(--gray-50); }
-  .td-num { color: var(--gray-400); font-size: 13px; }
-  .td-name { font-weight: 600; color: var(--gray-900); }
-  .table-footer { padding: 24px; display: flex; justify-content: center; border-top: 1px solid var(--gray-100); }
-  .btn-proceed { padding: 13px 32px; background: var(--blue); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; }
-  .btn-proceed:hover { background: var(--blue-hover); }
+/* VOTE PAGE */
+.vote-container{max-width:700px;margin:0 auto}
+.vote-poll-title{font-size:24px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.vote-poll-desc{font-size:14px;color:var(--gray-500);margin-bottom:24px;line-height:1.6}
+.vote-poll-meta{display:flex;gap:16px;margin-bottom:24px;font-size:13px;color:var(--gray-400)}
+.vote-poll-meta span{display:flex;align-items:center;gap:6px}
+.vote-options{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.vote-option{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;user-select:none}
+.vote-option:hover{border-color:var(--blue);background:var(--blue-light)}
+.vote-option.selected{border-color:var(--blue);background:var(--blue-light);box-shadow:0 0 0 1px var(--blue)}
+.vote-option input{display:none}
+.vote-check{width:22px;height:22px;border:2px solid var(--gray-300);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}
+.vote-option.selected .vote-check{background:var(--blue);border-color:var(--blue);color:var(--white)}
+.vote-check-multi{border-radius:5px}
+.vote-option-text{font-size:15px;font-weight:500;color:var(--gray-800);flex:1}
+.btn-vote{width:100%;padding:14px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s}
+.btn-vote:hover{background:var(--blue-hover)}
+.btn-vote:disabled{background:var(--gray-300);cursor:not-allowed}
 
-  .btn-add-subject { display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--blue); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .btn-add-subject:hover { background: var(--blue-hover); }
-  .btn-icon { width: 34px; height: 34px; border: 1.5px solid var(--gray-200); border-radius: 8px; background: var(--white); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s; }
-  .btn-icon.danger { border-color: #fecaca; color: var(--red); }
-  .btn-icon.danger:hover { background: var(--red-light); }
-  .btn-icon.edit { color: var(--gray-600); }
-  .btn-icon.edit:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
-  .actions-cell { display: flex; gap: 8px; justify-content: flex-end; }
+/* RESULTS BARS */
+.result-bars{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+.result-bar-item{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);padding:16px 20px;position:relative;overflow:hidden}
+.result-bar-fill{position:absolute;left:0;top:0;bottom:0;background:var(--blue-light);border-radius:var(--radius-sm);transition:width 0.8s cubic-bezier(0.25,1,0.5,1)}
+.result-bar-content{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center}
+.result-bar-label{font-size:15px;font-weight:600;color:var(--gray-900)}
+.result-bar-count{display:flex;align-items:center;gap:8px}
+.result-bar-votes{font-size:14px;font-weight:700;color:var(--blue)}
+.result-bar-pct{font-size:12px;color:var(--gray-400)}
+.result-bar-item.winner{border-color:var(--blue)}
+.result-bar-item.winner .result-bar-fill{background:rgba(37,99,235,0.15)}
+.result-bar-item.winner .result-bar-label::after{content:'👑';margin-left:8px}
+.result-total{text-align:center;font-size:14px;color:var(--gray-400);margin-top:12px}
 
-  .pref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
-  .pref-panel { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
-  .pref-panel-header { padding: 16px 20px; border-bottom: 1px solid var(--gray-100); font-size: 15px; font-weight: 700; }
-  .pref-panel-body { padding: 12px; min-height: 280px; }
-  .subject-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); margin-bottom: 8px; background: var(--white); font-size: 14px; font-weight: 500; }
-  .btn-add { padding: 6px 16px; background: var(--blue); color: var(--white); border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .btn-add:hover { background: var(--blue-hover); }
-  .btn-add:disabled { background: var(--gray-300); cursor: not-allowed; }
-  .pref-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); margin-bottom: 8px; background: var(--white); cursor: grab; user-select: none; transition: box-shadow 0.15s; }
-  .pref-item.dragging { box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-color: var(--blue); }
-  .pref-rank { width: 24px; height: 24px; background: var(--blue); color: var(--white); border-radius: 6px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .pref-name { flex: 1; font-size: 14px; font-weight: 500; }
-  .btn-remove { width: 24px; height: 24px; background: #fef2f2; border: none; border-radius: 6px; color: #dc2626; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .drag-handle { color: var(--gray-300); font-size: 14px; }
-  .empty-pref { display: flex; align-items: center; justify-content: center; height: 200px; color: var(--gray-400); font-size: 14px; }
-  .btn-submit-pref { display: block; margin: 0 auto; padding: 13px 40px; background: var(--blue); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-  .btn-submit-pref:disabled { opacity: 0.5; cursor: not-allowed; }
-  .instructions-box { background: #fffbeb; border: 1.5px solid #fef08a; border-radius: var(--radius); padding: 20px 24px; margin-top: 24px; }
-  .instructions-box h4 { font-size: 14px; font-weight: 700; color: #92400e; margin-bottom: 10px; }
-  .instructions-box ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-  .instructions-box ul li { font-size: 13px; color: #78350f; padding-left: 14px; position: relative; }
-  .instructions-box ul li::before { content: '•'; position: absolute; left: 0; }
+/* CREATE POLL */
+.create-form{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:32px;max-width:700px;margin:0 auto}
+.option-inputs{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.option-row{display:flex;gap:10px;align-items:center}
+.option-row .form-input{flex:1}
+.btn-remove-opt{width:34px;height:34px;border:1.5px solid #fecaca;border-radius:8px;background:var(--white);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.15s;flex-shrink:0}
+.btn-remove-opt:hover{background:var(--red-light)}
+.btn-add-option{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px dashed var(--gray-300);border-radius:var(--radius-sm);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--gray-500);cursor:pointer;transition:all 0.15s}
+.btn-add-option:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.type-selector{display:flex;gap:10px;margin-bottom:16px}
+.type-btn{flex:1;padding:12px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--gray-600);cursor:pointer;text-align:center;transition:all 0.15s}
+.type-btn.active{border-color:var(--blue);background:var(--blue-light);color:var(--blue);font-weight:600}
+.type-btn:hover{border-color:var(--blue)}
 
-  .result-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 60px 40px; text-align: center; margin-bottom: 24px; }
-  .result-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-  .result-icon.pending { background: var(--gray-100); color: var(--gray-400); }
-  .result-icon.success { background: var(--green-light); color: var(--green); }
-  .result-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-  .result-desc { font-size: 14px; color: var(--gray-500); max-width: 420px; margin: 0 auto 28px; line-height: 1.6; }
-  .btn-return { padding: 13px 40px; background: var(--blue); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; max-width: 500px; }
-  .btn-return:hover { background: var(--blue-hover); }
-  .allocated-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--green-light); color: var(--green); border-radius: 8px; font-size: 15px; font-weight: 700; margin-bottom: 24px; }
+/* MY POLLS */
+.my-poll-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:20px 24px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.my-poll-info h3{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.my-poll-info p{font-size:13px;color:var(--gray-400)}
+.my-poll-actions{display:flex;gap:8px;flex-shrink:0}
+.btn-sm{padding:8px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-200);background:var(--white);color:var(--gray-700);transition:all 0.15s}
+.btn-sm:hover{border-color:var(--gray-300);background:var(--gray-50)}
+.btn-sm.danger{border-color:#fecaca;color:var(--red)}
+.btn-sm.danger:hover{background:var(--red-light)}
+.btn-sm.primary{background:var(--blue);color:var(--white);border-color:var(--blue)}
+.btn-sm.primary:hover{background:var(--blue-hover)}
 
-  .polling-status-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 24px 28px; margin-top: 28px; display: flex; align-items: center; justify-content: space-between; }
-  .polling-status-left h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-  .polling-status-left p { font-size: 14px; color: var(--gray-500); }
-  .polling-status-right { display: flex; align-items: center; gap: 12px; }
-  .polling-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-  .polling-label.open { color: var(--green); }
-  .polling-label.closed { color: var(--gray-500); }
-  .polling-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .polling-dot.open { background: var(--green); animation: pulse 2s infinite; }
-  .polling-dot.closed { background: var(--gray-400); }
-  .toggle-switch { position: relative; width: 48px; height: 26px; cursor: pointer; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
-  .toggle-track { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--gray-300); border-radius: 99px; transition: background 0.2s; }
-  .toggle-switch input:checked + .toggle-track { background: var(--blue); }
-  .toggle-thumb { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: var(--white); border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); pointer-events: none; }
-  .toggle-switch input:checked ~ .toggle-thumb { transform: translateX(22px); }
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:20px 24px}
+.stat-label{font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.stat-value{font-size:28px;font-weight:700;color:var(--gray-900)}
+.stat-sub{font-size:13px;color:var(--gray-400);margin-top:4px}
 
-  .admin-info-box { background: var(--gray-100); border-radius: var(--radius); padding: 24px 28px; margin-top: 24px; }
-  .admin-info-box-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
-  .workflow-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .workflow-list li { font-size: 14px; color: var(--gray-600); display: flex; gap: 12px; }
-  .workflow-num { width: 22px; height: 22px; background: var(--gray-400); color: var(--white); border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+/* TABLES */
+.table-wrap{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--gray-50);border-bottom:1.5px solid var(--gray-200)}
+th{padding:14px 20px;text-align:left;font-size:13px;font-weight:600;color:var(--gray-500);letter-spacing:0.3px}
+td{padding:16px 20px;font-size:14px;color:var(--gray-700);border-bottom:1px solid var(--gray-100);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--gray-50)}
+.td-num{color:var(--gray-400);font-size:13px}
+.td-name{font-weight:600;color:var(--gray-900)}
+.seat-badge{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:28px;padding:0 10px;background:var(--blue-light);color:var(--blue);border-radius:99px;font-size:13px;font-weight:700}
+.table-footer{padding:24px;display:flex;justify-content:center;border-top:1px solid var(--gray-100)}
 
-  .alloc-run-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 48px 40px; text-align: center; margin-bottom: 24px; }
-  .alloc-run-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-  .alloc-run-desc { font-size: 14px; color: var(--gray-500); max-width: 480px; margin: 0 auto 28px; line-height: 1.6; }
-  .btn-run-alloc { padding: 14px 40px; background: var(--blue); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-  .btn-run-alloc:hover { background: var(--blue-hover); }
-  .btn-run-alloc:disabled { background: var(--gray-300); cursor: not-allowed; }
+/* BUTTONS */
+.btn-proceed{padding:13px 32px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s}
+.btn-proceed:hover{background:var(--blue-hover)}
+.btn-icon{width:34px;height:34px;border:1.5px solid var(--gray-200);border-radius:8px;background:var(--white);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
+.btn-icon.danger{border-color:#fecaca;color:var(--red)}
+.btn-icon.danger:hover{background:var(--red-light);border-color:#fca5a5}
+.btn-icon.edit{color:var(--gray-600)}
+.btn-icon.edit:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.actions-cell{display:flex;gap:8px;justify-content:flex-end}
+.btn-add-subject{display:flex;align-items:center;gap:8px;padding:10px 18px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s}
+.btn-add-subject:hover{background:var(--blue-hover)}
 
-  .results-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-  .stat-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 20px 24px; }
-  .stat-label { font-size: 12px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-  .stat-value { font-size: 28px; font-weight: 700; }
-  .stat-sub { font-size: 13px; color: var(--gray-400); margin-top: 4px; }
-  .alloc-result-badge { display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
-  .alloc-result-badge.allocated { background: var(--green-light); color: var(--green); }
-  .alloc-result-badge.unallocated { background: var(--red-light); color: var(--red); }
+/* PREFERENCES */
+.pref-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.pref-panel{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);overflow:hidden}
+.pref-panel-header{padding:16px 20px;border-bottom:1px solid var(--gray-100);font-size:15px;font-weight:700;color:var(--gray-900)}
+.pref-panel-body{padding:12px;min-height:280px}
+.subject-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);margin-bottom:8px;background:var(--white);font-size:14px;font-weight:500;color:var(--gray-800)}
+.btn-add{padding:6px 16px;background:var(--blue);color:var(--white);border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.2s}
+.btn-add:hover{background:var(--blue-hover)}
+.btn-add:disabled{background:var(--gray-300);cursor:not-allowed}
+.pref-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);margin-bottom:8px;background:var(--white);cursor:grab;user-select:none;transition:box-shadow 0.15s,border-color 0.15s}
+.pref-item:active{cursor:grabbing}
+.pref-item.dragging{box-shadow:0 8px 24px rgba(0,0,0,0.12);border-color:var(--blue);opacity:0.9}
+.pref-rank{width:24px;height:24px;background:var(--blue);color:var(--white);border-radius:6px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pref-name{flex:1;font-size:14px;font-weight:500;color:var(--gray-800)}
+.btn-remove{width:24px;height:24px;background:#fef2f2;border:none;border-radius:6px;color:#dc2626;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background 0.15s;flex-shrink:0}
+.btn-remove:hover{background:#fee2e2}
+.drag-handle{color:var(--gray-300);font-size:14px}
+.empty-pref{display:flex;align-items:center;justify-content:center;height:200px;color:var(--gray-400);font-size:14px;text-align:center}
+.btn-submit-pref{display:block;margin:0 auto;padding:13px 40px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s,opacity 0.2s}
+.btn-submit-pref:hover{background:var(--blue-hover)}
+.btn-submit-pref:disabled{opacity:0.5;cursor:not-allowed}
 
-  .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal-box { background: var(--white); border-radius: 16px; padding: 32px; width: 460px; box-shadow: 0 24px 64px rgba(0,0,0,0.2); }
-  .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
-  .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
-  .btn-modal-cancel { flex: 1; padding: 11px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); background: var(--white); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--gray-700); cursor: pointer; }
-  .btn-modal-save { flex: 1; padding: 11px; background: var(--blue); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .btn-modal-delete { flex: 1; padding: 11px; background: var(--red); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
+/* STATUS BADGES */
+.status-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600;margin-top:16px}
+.cgpa-line{font-size:15px;color:var(--gray-500);margin-top:4px}
+.cgpa-val{color:var(--blue);font-weight:700}
 
-  .toast { position: fixed; bottom: 32px; right: 32px; padding: 14px 20px; background: var(--gray-900); color: var(--white); border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg); z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .toast.show { transform: translateY(0); opacity: 1; }
-  .toast.success { background: var(--green); }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @media (max-width: 768px) { .cards-grid, .admin-cards-grid { grid-template-columns: 1fr 1fr; } .pref-grid { grid-template-columns: 1fr; } .main-content { padding: 20px; } .navbar { padding: 0 20px; } .login-card { width: 92vw; padding: 28px 24px; } }
+/* POLLING TOGGLE */
+.polling-status-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:24px 28px;margin-top:28px;display:flex;align-items:center;justify-content:space-between}
+.polling-status-left h3{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.polling-status-left p{font-size:14px;color:var(--gray-500)}
+.polling-status-right{display:flex;align-items:center;gap:12px}
+.polling-label{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+.polling-label.open{color:var(--green)}
+.polling-label.closed{color:var(--gray-500)}
+.polling-dot{width:8px;height:8px;border-radius:50%}
+.polling-dot.open{background:var(--green);animation:pulse 2s infinite}
+.polling-dot.closed{background:var(--gray-400)}
+.toggle-switch{position:relative;width:48px;height:26px;cursor:pointer}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--gray-300);border-radius:99px;transition:background 0.2s}
+.toggle-switch input:checked+.toggle-track{background:var(--blue)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;background:var(--white);border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.2);pointer-events:none}
+.toggle-switch input:checked~.toggle-thumb{transform:translateX(22px)}
+
+/* ALLOC */
+.alloc-explain-card{background:var(--blue-light);border:1.5px solid #bfdbfe;border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}
+.alloc-explain-title{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.alloc-steps{display:flex;flex-direction:column;gap:14px}
+.alloc-step{display:flex;gap:14px;align-items:flex-start}
+.alloc-step-num{width:28px;height:28px;background:var(--blue);color:var(--white);border-radius:50%;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.alloc-step-text{font-size:14px;color:var(--gray-700);padding-top:5px;line-height:1.5}
+.alloc-step-text strong{color:var(--gray-900)}
+.alloc-run-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:48px 40px;text-align:center;margin-bottom:24px}
+.alloc-run-icon{width:72px;height:72px;background:var(--blue-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--blue)}
+.alloc-run-title{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:10px}
+.alloc-run-desc{font-size:14px;color:var(--gray-500);max-width:480px;margin:0 auto 28px;line-height:1.6}
+.btn-run-alloc{padding:14px 40px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-run-alloc:hover{background:var(--blue-hover)}
+.btn-run-alloc:disabled{background:var(--gray-300);cursor:not-allowed}
+.alloc-warning{background:var(--orange-light);border:1.5px solid #fed7aa;border-radius:var(--radius);padding:16px 20px;font-size:14px;color:#9a3412;display:flex;align-items:flex-start;gap:10px}
+.alloc-result-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.alloc-result-badge.allocated{background:var(--green-light);color:var(--green)}
+.alloc-result-badge.unallocated{background:var(--red-light);color:var(--red)}
+
+/* RESULT */
+.result-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:60px 40px;text-align:center;margin-bottom:24px}
+.result-icon{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.result-icon.pending{background:var(--gray-100);color:var(--gray-400)}
+.result-icon.success{background:var(--green-light);color:var(--green)}
+.result-title{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:10px}
+.result-desc{font-size:14px;color:var(--gray-500);max-width:420px;margin:0 auto 28px;line-height:1.6}
+.btn-return{padding:13px 40px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s;width:100%;max-width:500px}
+.btn-return:hover{background:var(--blue-hover)}
+.allocated-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:var(--green-light);color:var(--green);border-radius:8px;font-size:15px;font-weight:700;margin-bottom:24px}
+
+/* INFO */
+.info-box{background:var(--gray-100);border-radius:var(--radius);padding:24px 28px;margin-top:28px}
+.info-box-title{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:14px}
+.info-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.info-list li{font-size:14px;color:var(--gray-600);display:flex;gap:8px;align-items:flex-start}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:80px 40px;color:var(--gray-400)}
+.empty-state svg{margin-bottom:16px;color:var(--gray-300)}
+.empty-state h3{font-size:20px;font-weight:700;color:var(--gray-600);margin-bottom:8px}
+.empty-state p{font-size:14px;margin-bottom:24px}
+
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--white);border-radius:16px;padding:32px;width:460px;box-shadow:0 24px 64px rgba(0,0,0,0.2);transform:translateY(16px);transition:transform 0.2s}
+.modal-overlay.open .modal-box{transform:translateY(0)}
+.modal-title{font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:20px}
+.modal-actions{display:flex;gap:12px;margin-top:24px}
+.btn-modal-cancel{flex:1;padding:11px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--gray-700);cursor:pointer;transition:all 0.15s}
+.btn-modal-cancel:hover{background:var(--gray-50)}
+.btn-modal-save{flex:1;padding:11px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.15s}
+.btn-modal-save:hover{background:var(--blue-hover)}
+.btn-modal-delete{flex:1;padding:11px;background:var(--red);color:var(--white);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.15s}
+.btn-modal-delete:hover{background:#b91c1c}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;right:32px;padding:14px 20px;background:var(--gray-900);color:var(--white);border-radius:var(--radius-sm);font-size:14px;font-weight:500;box-shadow:var(--shadow-lg);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:var(--green)}
+.toast.error{background:var(--red)}
+
+@media(max-width:900px){.cards-grid,.poll-feed{grid-template-columns:1fr}.cards-grid-4{grid-template-columns:repeat(2,1fr)}.stats-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.cards-grid,.cards-grid-4,.poll-feed{grid-template-columns:1fr}.pref-grid{grid-template-columns:1fr}.main-content{padding:20px}.navbar{padding:0 20px}.login-card{width:92vw;padding:28px 24px}.stats-grid{grid-template-columns:1fr}.type-selector{flex-direction:column}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ═══════════ LOGIN ═══════════ -->
 <div id="page-login" class="page active">
   <div class="login-logo">
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
     Pollka.com
   </div>
   <div class="login-card">
-    <div class="tab-bar">
-      <button class="tab-btn active" id="tab-student" onclick="switchTab('student')">Student</button>
-      <button class="tab-btn" id="tab-admin" onclick="switchTab('admin')">Admin</button>
-    </div>
-    <h2 class="login-title" id="login-title">Student Login</h2>
-    <p class="login-sub" id="login-sub">Access your polling dashboard</p>
-    <div class="error-msg" id="login-error">Invalid username or password.</div>
+    <h2 class="login-title">Welcome Back</h2>
+    <p class="login-sub">Sign in to create polls and vote</p>
+    <div class="error-msg" id="login-error"></div>
     <div class="form-group">
       <label class="form-label">Username</label>
       <input class="form-input" id="input-username" type="text" placeholder="Enter your username"/>
@@ -213,611 +329,880 @@
     </div>
     <button class="btn-primary" onclick="doLogin()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      <span id="login-btn-text">Login as Student</span>
+      Sign In
     </button>
-    <div class="demo-hint" id="demo-hint">Demo: Use username <code>student1</code> and password <code>password</code></div>
+    <a class="link-text" onclick="navigate('register')">Don't have an account? Register →</a>
+    <div class="demo-hint">Demo: <code>student1</code> / <code>password</code> or <code>admin</code> / <code>admin123</code></div>
   </div>
-  <a class="back-link">← Back to Home</a>
 </div>
 
-<!-- STUDENT DASHBOARD -->
+<!-- ═══════════ REGISTER ═══════════ -->
+<div id="page-register" class="page">
+  <div class="login-logo">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+    Pollka.com
+  </div>
+  <div class="login-card">
+    <h2 class="login-title">Create Account</h2>
+    <p class="login-sub">Join Pollka to create and vote on polls</p>
+    <div class="error-msg" id="register-error"></div>
+    <div class="form-group">
+      <label class="form-label">Display Name</label>
+      <input class="form-input" id="reg-name" type="text" placeholder="Your name"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input class="form-input" id="reg-username" type="text" placeholder="Choose a username"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email (optional)</label>
+      <input class="form-input" id="reg-email" type="email" placeholder="you@example.com"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" id="reg-password" type="password" placeholder="Choose a password" onkeydown="if(event.key==='Enter') doRegister()"/>
+    </div>
+    <button class="btn-primary" onclick="doRegister()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      Create Account
+    </button>
+    <a class="link-text" onclick="navigate('login')">← Already have an account? Sign In</a>
+  </div>
+</div>
+
+<!-- ═══════════ USER DASHBOARD ═══════════ -->
 <div id="page-dashboard" class="page">
   <nav class="navbar">
-    <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
-    <button class="nav-action" onclick="doLogout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</button>
+    <div class="nav-logo" onclick="navigate('dashboard')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Pollka.com
+    </div>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-username"></span>
+      <button class="nav-action" onclick="doLogout()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+    </div>
   </nav>
   <div class="main-content">
     <p class="page-title" id="dash-welcome">Welcome!</p>
-    <p class="cgpa-line">Your CGPA: <span class="cgpa-val" id="dash-cgpa">—</span></p>
-    <div class="status-badge"><div class="status-dot"></div>Polling Open</div>
+    <p class="page-sub">Create polls, vote, and see results in real-time</p>
     <div class="cards-grid">
-      <div class="action-card" onclick="navigate('subjects')">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-        <div class="card-title">View Subjects</div>
-        <div class="card-desc">Browse available subjects and their seat availability.</div>
+      <div class="action-card" onclick="navigate('poll-feed')">
+        <div class="card-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="card-title">Browse Polls</div>
+        <div class="card-desc">Discover active polls and cast your vote on topics that matter.</div>
       </div>
-      <div class="action-card" onclick="navigate('preferences')">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
-        <div class="card-title">Submit Preferences</div>
-        <div class="card-desc">Rank your preferred subjects in order of priority.</div>
+      <div class="action-card" onclick="navigate('create-poll')">
+        <div class="card-icon purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="card-title">Create a Poll</div>
+        <div class="card-desc">Ask any question — single choice, multiple choice, or ranked.</div>
       </div>
-      <div class="action-card" onclick="navigate('result')">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-        <div class="card-title">View Result</div>
-        <div class="card-desc">Check your subject allocation result after processing.</div>
+      <div class="action-card" onclick="navigate('my-polls')">
+        <div class="card-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div class="card-title">My Polls</div>
+        <div class="card-desc">Manage polls you've created — view results, close, or delete.</div>
       </div>
     </div>
-    <div class="info-box">
-      <div class="info-box-title">📋 How Subject Allocation Works</div>
-      <ol class="info-list">
-        <li><span class="num">1.</span> Submit your subject preferences while polling is open</li>
-        <li><span class="num">2.</span> Allocation is based on <strong>CGPA priority</strong> — higher CGPA gets their preferred subject first</li>
-        <li><span class="num">3.</span> Results are published once admin runs the allocation</li>
-      </ol>
-    </div>
-  </div>
-</div>
-
-<!-- STUDENT SUBJECTS -->
-<div id="page-subjects" class="page">
-  <nav class="navbar">
-    <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
-    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Dashboard</button>
-  </nav>
-  <div class="main-content">
-    <div class="page-header"><div class="page-header-left"><h1>Available Subjects</h1><p>Browse all subjects and their seat availability</p></div></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th style="width:60px">#</th><th>Subject Name</th><th>Total Seats</th><th style="text-align:right">Available Seats</th></tr></thead>
-        <tbody id="subjects-tbody"></tbody>
-      </table>
-      <div class="table-footer"><button class="btn-proceed" onclick="navigate('preferences')">Proceed to Submit Preferences →</button></div>
-    </div>
-  </div>
-</div>
-
-<!-- STUDENT PREFERENCES -->
-<div id="page-preferences" class="page">
-  <nav class="navbar">
-    <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
-    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Dashboard</button>
-  </nav>
-  <div class="main-content">
-    <div class="page-header"><div class="page-header-left"><h1>Submit Your Preferences</h1><p>Add subjects and rank them in order of preference</p></div></div>
-    <div class="pref-grid">
-      <div class="pref-panel">
-        <div class="pref-panel-header">Available Subjects</div>
-        <div class="pref-panel-body" id="available-list"></div>
+    <!-- Subject allocation cards for students with CGPA -->
+    <div id="dash-subject-section" style="display:none">
+      <h2 style="font-size:20px;font-weight:700;margin-top:40px;margin-bottom:4px;color:var(--gray-900)">📚 Subject Allocation</h2>
+      <p class="page-sub">CGPA: <span class="cgpa-val" id="dash-cgpa">—</span></p>
+      <div class="status-badge" id="dash-poll-badge" style="background:var(--green-light);color:var(--green)">
+        <div class="poll-status-dot active"></div>Polling Open
       </div>
-      <div class="pref-panel">
-        <div class="pref-panel-header">Your Preferences</div>
-        <div class="pref-panel-body" id="preference-list">
-          <div class="empty-pref" id="pref-empty">Add subjects to create your preference list</div>
+      <div class="cards-grid" style="margin-top:16px">
+        <div class="action-card" onclick="navigate('subjects')">
+          <div class="card-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div class="card-title">View Subjects</div>
+          <div class="card-desc">Browse elective subjects and seat availability.</div>
+        </div>
+        <div class="action-card" onclick="navigate('preferences')">
+          <div class="card-icon orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+          <div class="card-title">Submit Preferences</div>
+          <div class="card-desc">Rank your preferred subjects by priority.</div>
+        </div>
+        <div class="action-card" onclick="navigate('result')">
+          <div class="card-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="card-title">View Result</div>
+          <div class="card-desc">Check your subject allocation status.</div>
         </div>
       </div>
     </div>
-    <button class="btn-submit-pref" id="btn-submit-pref" onclick="submitPreferences()" disabled>✓ &nbsp;Submit Preferences</button>
-    <div class="instructions-box" style="margin-top:24px">
-      <h4>💡 Instructions</h4>
-      <ul>
-        <li>Click "Add" to include subjects in your preference list</li>
-        <li>Drag and drop to reorder your preferences (1 = highest priority)</li>
-        <li>You can remove subjects by clicking the × button</li>
-      </ul>
+  </div>
+</div>
+
+<!-- ═══════════ POLL FEED ═══════════ -->
+<div id="page-poll-feed" class="page">
+  <nav class="navbar">
+    <div class="nav-logo" onclick="navigate('dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
+    <div class="nav-right">
+      <button class="nav-action" onclick="navigate('create-poll')" style="background:var(--blue);color:var(--white);border-color:var(--blue)">+ Create Poll</button>
+      <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+    </div>
+  </nav>
+  <div class="main-content">
+    <div class="page-header"><div class="page-header-left"><h1>Browse Polls</h1><p>Vote on active polls or view results of closed ones</p></div></div>
+    <div class="poll-feed" id="poll-feed-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════ VOTE / VIEW POLL ═══════════ -->
+<div id="page-vote" class="page">
+  <nav class="navbar">
+    <div class="nav-logo" onclick="navigate('dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
+    <button class="nav-action" onclick="navigate('poll-feed')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+  </nav>
+  <div class="main-content">
+    <div class="vote-container" id="vote-container">Loading…</div>
+  </div>
+</div>
+
+<!-- ═══════════ CREATE POLL ═══════════ -->
+<div id="page-create-poll" class="page">
+  <nav class="navbar">
+    <div class="nav-logo" onclick="navigate('dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
+    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+  </nav>
+  <div class="main-content">
+    <div class="page-header"><div class="page-header-left"><h1>Create a Poll</h1><p>Ask anything — your poll will be visible to all users</p></div></div>
+    <div class="create-form">
+      <div class="form-group">
+        <label class="form-label">Poll Title</label>
+        <input class="form-input" id="create-title" type="text" placeholder="What's your question?"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description (optional)</label>
+        <textarea class="form-input" id="create-desc" placeholder="Add more context about your poll..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Poll Type</label>
+        <div class="type-selector">
+          <button class="type-btn active" data-type="single" onclick="selectPollType('single')">🔘 Single Choice</button>
+          <button class="type-btn" data-type="multiple" onclick="selectPollType('multiple')">☑️ Multiple Choice</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Options</label>
+        <div class="option-inputs" id="option-inputs">
+          <div class="option-row"><input class="form-input" placeholder="Option 1" /><button class="btn-remove-opt" onclick="removeOption(this)" style="visibility:hidden">×</button></div>
+          <div class="option-row"><input class="form-input" placeholder="Option 2" /><button class="btn-remove-opt" onclick="removeOption(this)" style="visibility:hidden">×</button></div>
+        </div>
+        <button class="btn-add-option" onclick="addOption()">+ Add Option</button>
+      </div>
+      <button class="btn-primary" onclick="createPoll()" style="margin-top:24px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Create Poll
+      </button>
     </div>
   </div>
 </div>
 
-<!-- STUDENT RESULT -->
+<!-- ═══════════ MY POLLS ═══════════ -->
+<div id="page-my-polls" class="page">
+  <nav class="navbar">
+    <div class="nav-logo" onclick="navigate('dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
+    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+  </nav>
+  <div class="main-content">
+    <div class="page-header">
+      <div class="page-header-left"><h1>My Polls</h1><p>Manage polls you've created</p></div>
+      <button class="btn-add-subject" onclick="navigate('create-poll')">+ Create New Poll</button>
+    </div>
+    <div id="my-polls-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════ STUDENT SUBJECTS ═══════════ -->
+<div id="page-subjects" class="page">
+  <nav class="navbar">
+    <div class="nav-logo" onclick="navigate('dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
+    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+  </nav>
+  <div class="main-content">
+    <div class="page-header"><div class="page-header-left"><h1>Available Subjects</h1><p>All elective subjects and their seat availability</p></div></div>
+    <div class="table-wrap">
+      <table><thead><tr><th style="width:60px">#</th><th>Subject Name</th><th>Total Seats</th></tr></thead>
+      <tbody id="subjects-tbody"><tr><td colspan="3" style="text-align:center;color:var(--gray-400);padding:32px">Loading…</td></tr></tbody></table>
+      <div class="table-footer"><button class="btn-proceed" onclick="navigate('preferences')">Submit Preferences →</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ STUDENT PREFERENCES ═══════════ -->
+<div id="page-preferences" class="page">
+  <nav class="navbar">
+    <div class="nav-logo" onclick="navigate('dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
+    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
+  </nav>
+  <div class="main-content">
+    <div class="page-header"><div class="page-header-left"><h1>Submit Preferences</h1><p>Drag to rank — position 1 is your top choice</p></div></div>
+    <div class="pref-grid">
+      <div class="pref-panel"><div class="pref-panel-header">Available Subjects</div><div class="pref-panel-body" id="available-list"></div></div>
+      <div class="pref-panel"><div class="pref-panel-header">Your Preferences (ranked)</div><div class="pref-panel-body" id="preference-list"><div class="empty-pref" id="pref-empty">Click "Add" to build your ranked list</div></div></div>
+    </div>
+    <button class="btn-submit-pref" id="btn-submit-pref" onclick="submitPreferences()" disabled>✓  Submit Preferences</button>
+  </div>
+</div>
+
+<!-- ═══════════ STUDENT RESULT ═══════════ -->
 <div id="page-result" class="page">
   <nav class="navbar">
-    <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
-    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Dashboard</button>
+    <div class="nav-logo" onclick="navigate('dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com</div>
+    <button class="nav-action" onclick="navigate('dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
   </nav>
   <div class="main-content">
     <div class="page-header"><div class="page-header-left"><h1>Allocation Result</h1><p>Your subject allocation status</p></div></div>
-    <div class="result-card" id="result-card"></div>
+    <div class="result-card" id="result-card">Loading…</div>
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
+<!-- ═══════════ ADMIN DASHBOARD ═══════════ -->
 <div id="page-admin-dashboard" class="page">
   <nav class="navbar">
-    <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com <span class="nav-logo-badge">Admin</span></div>
-    <button class="nav-action" onclick="doLogout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</button>
+    <div class="nav-logo" onclick="navigate('admin-dashboard')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com <span class="nav-logo-badge">Admin</span></div>
+    <div class="nav-right">
+      <button class="nav-action" onclick="navigate('poll-feed')" style="background:var(--blue);color:var(--white);border-color:var(--blue)">Browse Polls</button>
+      <button class="nav-action" onclick="doLogout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</button>
+    </div>
   </nav>
   <div class="main-content">
     <p class="page-title">Admin Dashboard</p>
-    <p class="cgpa-line">Manage subjects, control polling, and run allocations</p>
-    <div class="admin-cards-grid" style="margin-top:28px">
+    <p class="page-sub">Manage subjects, polls, and run allocations</p>
+    <div class="polling-status-card">
+      <div class="polling-status-left"><h3>Subject Polling Status</h3><p id="admin-polling-desc">Students can currently submit preferences</p></div>
+      <div class="polling-status-right">
+        <span class="polling-label open" id="admin-polling-label"><span class="polling-dot open" id="admin-polling-dot"></span><span id="admin-polling-text">Open</span></span>
+        <label class="toggle-switch"><input type="checkbox" id="polling-toggle" checked onchange="togglePolling()"/><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+      </div>
+    </div>
+    <div class="cards-grid-4">
       <div class="action-card" onclick="navigate('admin-subjects')">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="card-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <div class="card-title">Manage Subjects</div>
-        <div class="card-desc">Add, edit, or remove subjects and seat limits.</div>
+        <div class="card-desc">Add, edit, or remove subjects.</div>
       </div>
       <div class="action-card" onclick="navigate('admin-allocation')">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        <div class="card-icon orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
         <div class="card-title">Run Allocation</div>
-        <div class="card-desc">Execute the CGPA-based allocation algorithm.</div>
+        <div class="card-desc">Execute CGPA-based allocation.</div>
       </div>
       <div class="action-card" onclick="navigate('admin-results')">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="card-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <div class="card-title">View Results</div>
-        <div class="card-desc">See allocation results and statistics.</div>
+        <div class="card-desc">Student allocation results.</div>
+      </div>
+      <div class="action-card" onclick="navigate('create-poll')">
+        <div class="card-icon purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="card-title">Create Poll</div>
+        <div class="card-desc">Create a new general poll.</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ADMIN SUBJECTS -->
+<!-- ═══════════ ADMIN SUBJECTS ═══════════ -->
 <div id="page-admin-subjects" class="page">
   <nav class="navbar">
     <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com <span class="nav-logo-badge">Admin</span></div>
-    <button class="nav-action" onclick="navigate('admin-dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Dashboard</button>
+    <button class="nav-action" onclick="navigate('admin-dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
   </nav>
   <div class="main-content">
     <div class="page-header">
-      <div class="page-header-left"><h1>Subject Management</h1><p>Add, edit, or remove subjects</p></div>
+      <div class="page-header-left"><h1>Subject Management</h1><p>Add, edit, or remove elective subjects</p></div>
       <button class="btn-add-subject" onclick="openAddModal()">+ Add Subject</button>
     </div>
     <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>Subject Name</th><th style="text-align:center">Seats</th><th style="text-align:right">Actions</th></tr></thead>
-        <tbody id="admin-subjects-tbody"></tbody>
-      </table>
+      <table><thead><tr><th style="width:60px">#</th><th>Subject Name</th><th style="text-align:center">Seat Limit</th><th style="text-align:right">Actions</th></tr></thead>
+      <tbody id="admin-subjects-tbody"><tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:32px">Loading…</td></tr></tbody></table>
     </div>
   </div>
 </div>
 
-<!-- ADMIN ALLOCATION -->
+<!-- ═══════════ ADMIN ALLOCATION ═══════════ -->
 <div id="page-admin-allocation" class="page">
   <nav class="navbar">
     <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com <span class="nav-logo-badge">Admin</span></div>
-    <button class="nav-action" onclick="navigate('admin-dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Dashboard</button>
+    <button class="nav-action" onclick="navigate('admin-dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
   </nav>
   <div class="main-content">
     <div class="page-header"><div class="page-header-left"><h1>Allocation Control</h1><p>Run the CGPA-based allocation algorithm</p></div></div>
-    <div class="alloc-run-card">
-      <div class="alloc-run-title">Ready to Run Allocation</div>
-      <div class="alloc-run-desc">This will assign subjects to students based on their CGPA (higher CGPA = higher priority) and their submitted preferences.</div>
-      <button class="btn-run-alloc" id="btn-run-alloc" onclick="runAllocation()">▶ Run Allocation</button>
+    <div class="alloc-explain-card">
+      <div class="alloc-explain-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> How the Algorithm Works</div>
+      <div class="alloc-steps">
+        <div class="alloc-step"><div class="alloc-step-num">1</div><div class="alloc-step-text"><strong>Preference Order:</strong> All 1st-choice subjects processed first, then 2nd, and so on.</div></div>
+        <div class="alloc-step"><div class="alloc-step-num">2</div><div class="alloc-step-text"><strong>CGPA Tiebreaker:</strong> Higher CGPA wins when students compete for the same subject.</div></div>
+        <div class="alloc-step"><div class="alloc-step-num">3</div><div class="alloc-step-text"><strong>Seat Limits:</strong> Subjects are only allocated if seats remain.</div></div>
+      </div>
     </div>
+    <div class="alloc-run-card">
+      <div class="alloc-run-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      <div class="alloc-run-title">Ready to Run</div>
+      <div class="alloc-run-desc">Assign subjects to all students based on preferences and CGPA.</div>
+      <button class="btn-run-alloc" id="btn-run-alloc" onclick="runAllocation()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run Allocation</button>
+    </div>
+    <div class="alloc-warning" id="alloc-warning" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9a3412" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Polling is still open. Consider closing it first.</span></div>
   </div>
 </div>
 
-<!-- ADMIN RESULTS -->
+<!-- ═══════════ ADMIN RESULTS ═══════════ -->
 <div id="page-admin-results" class="page">
   <nav class="navbar">
     <div class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Pollka.com <span class="nav-logo-badge">Admin</span></div>
-    <button class="nav-action" onclick="navigate('admin-dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Dashboard</button>
+    <button class="nav-action" onclick="navigate('admin-dashboard')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back</button>
   </nav>
   <div class="main-content">
-    <div class="page-header">
-      <div class="page-header-left"><h1>Allocation Results</h1><p>View all student allocation results</p></div>
-      <div style="display:flex;gap:10px">
-        <button class="btn-add-subject" onclick="navigate('admin-allocation')">▶ Run New Allocation</button>
-        <button class="btn-add-subject" style="background:#dc2626" onclick="clearAllocations()">🗑 Clear Allocations</button>
-      </div>
-    </div>
-    <div id="admin-results-content"></div>
+    <div class="page-header"><div class="page-header-left"><h1>Allocation Results</h1><p>All student allocation results</p></div></div>
+    <div id="admin-results-content"><div style="text-align:center;padding:40px;color:var(--gray-400)">Loading…</div></div>
   </div>
 </div>
 
-<!-- MODAL: Add/Edit Subject -->
+<!-- MODALS -->
 <div class="modal-overlay" id="modal-subject">
   <div class="modal-box">
     <div class="modal-title" id="modal-subject-title">Add Subject</div>
-    <div class="form-group">
-      <label class="form-label">Subject Name</label>
-      <input class="form-input" id="modal-subject-name" type="text" placeholder="e.g. Advanced Algorithms"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Seat Limit</label>
-      <input class="form-input" id="modal-subject-seats" type="number" min="1" placeholder="e.g. 30"/>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-modal-cancel" onclick="closeModal('modal-subject')">Cancel</button>
-      <button class="btn-modal-save" onclick="saveSubject()">Save</button>
-    </div>
+    <div class="form-group"><label class="form-label">Subject Name</label><input class="form-input" id="modal-subject-name" type="text" placeholder="e.g. Machine Learning"/></div>
+    <div class="form-group"><label class="form-label">Seat Limit</label><input class="form-input" id="modal-subject-seats" type="number" min="1" placeholder="e.g. 30"/></div>
+    <div class="modal-actions"><button class="btn-modal-cancel" onclick="closeModal('modal-subject')">Cancel</button><button class="btn-modal-save" onclick="saveSubject()">Save</button></div>
   </div>
 </div>
-
-<!-- MODAL: Edit Seats -->
-<div class="modal-overlay" id="modal-seats">
+<div class="modal-overlay" id="modal-delete">
   <div class="modal-box">
-    <div class="modal-title">Update Seat Limit</div>
-    <p style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:16px" id="modal-seats-subj-name"></p>
-    <div class="form-group">
-      <label class="form-label">New Seat Limit</label>
-      <input class="form-input" id="modal-seats-value" type="number" min="1"/>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-modal-cancel" onclick="closeModal('modal-seats')">Cancel</button>
-      <button class="btn-modal-save" onclick="saveSeats()">Update</button>
-    </div>
+    <div class="modal-title">Delete Subject?</div>
+    <p style="font-size:14px;color:var(--gray-500);margin-bottom:6px">You are about to permanently delete:</p>
+    <p style="font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:12px" id="modal-delete-name"></p>
+    <div class="modal-actions"><button class="btn-modal-cancel" onclick="closeModal('modal-delete')">Cancel</button><button class="btn-modal-delete" onclick="confirmDelete()">Delete</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-delete-poll">
+  <div class="modal-box">
+    <div class="modal-title">Delete Poll?</div>
+    <p style="font-size:14px;color:var(--gray-500);margin-bottom:6px">This will permanently delete this poll and all its votes.</p>
+    <p style="font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:12px" id="modal-delete-poll-name"></p>
+    <div class="modal-actions"><button class="btn-modal-cancel" onclick="closeModal('modal-delete-poll')">Cancel</button><button class="btn-modal-delete" onclick="confirmDeletePoll()">Delete</button></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const API = "http://127.0.0.1:8000"
+// ══════════════════════════════════════
+//  CONFIG & STATE
+// ══════════════════════════════════════
+const API = 'http://127.0.0.1:8000';
 
-let currentUser = null
-let currentTab = 'student'
-let preferences = []
-let submitted = false
-let subjectsList = []
-let editingSubjectId = null
-let editingSeatsId = null
+let currentUser   = null;
+let currentRole   = '';
+let subjects      = [];
+let preferences   = [];
+let submitted     = false;
+let pollingOpen   = true;
+let editingSubjectId  = null;
+let deletingSubjectId = null;
+let deletingPollId    = null;
+let newPollType       = 'single';
+let viewingPollId     = null;
 
-// ══ NAVIGATION ══
-function navigate(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
-  document.getElementById('page-' + page).classList.add('active')
-  window.scrollTo(0, 0)
-  if (page === 'subjects')          renderSubjectsTable()
-  if (page === 'preferences')       renderPreferences()
-  if (page === 'result')            renderResult()
-  if (page === 'dashboard')         updateDashboard()
-  if (page === 'admin-subjects')    renderAdminSubjects()
-  if (page === 'admin-results')     renderAdminResults()
+// ══════════════════════════════════════
+//  API HELPERS
+// ══════════════════════════════════════
+async function apiGet(path) { const r = await fetch(API + path); if (!r.ok) throw new Error(`GET ${path} → ${r.status}`); return r.json(); }
+async function apiPost(path, body) { const r = await fetch(API + path, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) }); if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.detail || `POST ${path} → ${r.status}`); } return r.json(); }
+async function apiPut(path, body) { const r = await fetch(API + path, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) }); if (!r.ok) throw new Error(`PUT ${path} → ${r.status}`); return r.json(); }
+async function apiDelete(path) { const r = await fetch(API + path, { method:'DELETE' }); if (!r.ok) throw new Error(`DELETE ${path} → ${r.status}`); return r.json(); }
+async function loadSubjects() { subjects = await apiGet('/subjects'); }
+
+// ══════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════
+async function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  try {
+    if (page === 'dashboard')         renderDashboard();
+    if (page === 'poll-feed')         await renderPollFeed();
+    if (page === 'create-poll')       resetCreateForm();
+    if (page === 'my-polls')          await renderMyPolls();
+    if (page === 'subjects')          await renderSubjectsTable();
+    if (page === 'preferences')       await renderPreferences();
+    if (page === 'result')            await renderResult();
+    if (page === 'admin-dashboard')   await renderAdminDashboard();
+    if (page === 'admin-subjects')    await renderAdminSubjects();
+    if (page === 'admin-allocation')  renderAllocPage();
+    if (page === 'admin-results')     await renderAdminResults();
+  } catch (err) { console.error(err); showToast('Could not connect to server', 'error'); }
 }
 
-// ══ LOGIN ══
-function switchTab(role) {
-  currentTab = role
-  document.getElementById('tab-student').classList.toggle('active', role === 'student')
-  document.getElementById('tab-admin').classList.toggle('active', role === 'admin')
-  document.getElementById('login-title').textContent = role === 'student' ? 'Student Login' : 'Admin Login'
-  document.getElementById('login-sub').textContent = role === 'student' ? 'Access your polling dashboard' : 'Manage polling and allocations'
-  document.getElementById('login-btn-text').textContent = role === 'student' ? 'Login as Student' : 'Login as Admin'
-  document.getElementById('demo-hint').innerHTML = role === 'student'
-    ? 'Demo: Use username <code>student1</code> and password <code>password</code>'
-    : 'Demo: Use username <code>admin</code> and password <code>admin123</code>'
-  document.getElementById('login-error').style.display = 'none'
-  document.getElementById('input-username').value = ''
-  document.getElementById('input-password').value = ''
-}
-
+// ══════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════
 async function doLogin() {
-  const username = document.getElementById('input-username').value.trim()
-  const password = document.getElementById('input-password').value
-  const err = document.getElementById('login-error')
-
-  if (currentTab === 'admin') {
-    if (username === 'admin' && password === 'admin123') {
-      currentUser = { role: 'admin', name: 'Admin' }
-      err.style.display = 'none'
-      navigate('admin-dashboard')
-      showToast('Welcome, Admin!', 'success')
-    } else {
-      err.style.display = 'block'
-    }
-    return
-  }
+  const username = document.getElementById('input-username').value.trim();
+  const password = document.getElementById('input-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  if (!username || !password) { errEl.textContent = 'Please enter both fields.'; errEl.style.display = 'block'; return; }
 
   try {
-    const res = await fetch(API + '/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    })
-    const data = await res.json()
+    const data = await apiPost('/login', { username, password });
     if (data.status === 'success') {
-      currentUser = data
-      preferences = []
-      submitted = false
-      err.style.display = 'none'
-      updateDashboard()
-      navigate('dashboard')
-      showToast('Welcome back, ' + data.name.split(' ')[0] + '!', 'success')
+      currentUser = { id: data.id, name: data.name, role: data.role, cgpa: data.cgpa, email: data.email };
+      currentRole = data.role;
+      // Load preferences for students
+      try { preferences = await apiGet(`/preferences/${data.id}`); } catch(_) { preferences = []; }
+      submitted = false;
+      if (data.role === 'admin') {
+        await navigate('admin-dashboard');
+      } else {
+        await navigate('dashboard');
+      }
+      showToast('Welcome, ' + data.name.split(' ')[0] + '! 👋', 'success');
     } else {
-      err.style.display = 'block'
+      errEl.textContent = 'Invalid username or password.';
+      errEl.style.display = 'block';
     }
-  } catch(e) {
-    err.textContent = 'Cannot connect to server. Is the backend running?'
-    err.style.display = 'block'
+  } catch (err) {
+    errEl.textContent = 'Cannot reach server. Is the backend running?';
+    errEl.style.display = 'block';
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const username = document.getElementById('reg-username').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const errEl = document.getElementById('register-error');
+  errEl.style.display = 'none';
+  if (!name || !username || !password) { errEl.textContent = 'Please fill in all required fields.'; errEl.style.display = 'block'; return; }
+
+  try {
+    const data = await apiPost('/register', { username, password, display_name: name, email: email || null });
+    currentUser = { id: data.id, name: data.name, role: 'user', cgpa: null };
+    currentRole = 'user';
+    preferences = [];
+    submitted = false;
+    await navigate('dashboard');
+    showToast('Account created! Welcome, ' + name.split(' ')[0] + '! 🎉', 'success');
+  } catch (err) {
+    errEl.textContent = err.message || 'Registration failed.';
+    errEl.style.display = 'block';
   }
 }
 
 function doLogout() {
-  currentUser = null; preferences = []; submitted = false
-  document.getElementById('input-username').value = ''
-  document.getElementById('input-password').value = ''
-  switchTab('student'); navigate('login')
-  showToast('Logged out')
+  currentUser = null; currentRole = ''; preferences = []; submitted = false;
+  document.getElementById('input-username').value = '';
+  document.getElementById('input-password').value = '';
+  navigate('login');
+  showToast('Logged out');
 }
 
-// ══ DASHBOARD ══
-function updateDashboard() {
-  if (!currentUser) return
-  document.getElementById('dash-welcome').textContent = 'Welcome, ' + currentUser.name + '!'
-  document.getElementById('dash-cgpa').textContent = currentUser.cgpa ?? '—'
+// ══════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════
+function renderDashboard() {
+  document.getElementById('dash-welcome').textContent = 'Welcome, ' + currentUser.name + '!';
+  document.getElementById('nav-username').textContent = currentUser.name;
+  // Show subject section only if user has CGPA
+  const subjSection = document.getElementById('dash-subject-section');
+  if (currentUser.cgpa) {
+    subjSection.style.display = 'block';
+    document.getElementById('dash-cgpa').textContent = currentUser.cgpa;
+    apiGet('/polling-status').then(ps => {
+      pollingOpen = ps.open;
+      const badge = document.getElementById('dash-poll-badge');
+      if (pollingOpen) {
+        badge.style.cssText = 'background:var(--green-light);color:var(--green);display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600;margin-top:16px';
+        badge.innerHTML = '<div class="poll-status-dot active"></div>Polling Open';
+      } else {
+        badge.style.cssText = 'background:var(--gray-100);color:var(--gray-500);display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:600;margin-top:16px';
+        badge.innerHTML = '<div style="width:8px;height:8px;background:var(--gray-400);border-radius:50%"></div>Polling Closed';
+      }
+    }).catch(() => {});
+  } else {
+    subjSection.style.display = 'none';
+  }
 }
 
-// ══ SUBJECTS TABLE ══
+// ══════════════════════════════════════
+//  POLL FEED
+// ══════════════════════════════════════
+async function renderPollFeed() {
+  const polls = await apiGet('/polls');
+  const grid = document.getElementById('poll-feed-grid');
+  if (polls.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><h3>No Polls Yet</h3><p>Be the first to create a poll!</p><button class="btn-proceed" onclick="navigate(\'create-poll\')">+ Create Poll</button></div>';
+    return;
+  }
+  grid.innerHTML = polls.map(p => `
+    <div class="poll-card" onclick="viewPoll(${p.id})">
+      <div class="poll-card-header">
+        <div class="poll-card-title">${esc(p.title)}</div>
+        <span class="poll-type-badge ${p.poll_type}">${p.poll_type}</span>
+      </div>
+      ${p.description ? `<div class="poll-card-desc">${esc(p.description)}</div>` : ''}
+      <div class="poll-card-meta">
+        <span><span class="poll-status-dot ${p.is_active ? 'active' : 'closed'}"></span>${p.is_active ? 'Active' : 'Closed'}</span>
+        <span>👤 ${esc(p.creator_name)}</span>
+        <span>🗳️ ${p.total_voters} vote${p.total_voters !== 1 ? 's' : ''}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════
+//  VIEW / VOTE ON POLL
+// ══════════════════════════════════════
+async function viewPoll(pollId) {
+  viewingPollId = pollId;
+  navigate('vote');
+  const container = document.getElementById('vote-container');
+  try {
+    const poll = await apiGet(`/polls/${pollId}`);
+    const myVotes = currentUser ? await apiGet(`/polls/${pollId}/my-vote/${currentUser.id}`) : [];
+    const hasVoted = myVotes.length > 0;
+    const totalVotes = poll.options.reduce((s, o) => s + o.vote_count, 0);
+    const maxVotes = Math.max(...poll.options.map(o => o.vote_count), 1);
+
+    let html = `
+      <div class="vote-poll-title">${esc(poll.title)}</div>
+      ${poll.description ? `<div class="vote-poll-desc">${esc(poll.description)}</div>` : ''}
+      <div class="vote-poll-meta">
+        <span><span class="poll-status-dot ${poll.is_active ? 'active' : 'closed'}"></span>${poll.is_active ? 'Active' : 'Closed'}</span>
+        <span class="poll-type-badge ${poll.poll_type}">${poll.poll_type} choice</span>
+        <span>👤 ${esc(poll.creator_name)}</span>
+        <span>🗳️ ${poll.total_voters} voter${poll.total_voters !== 1 ? 's' : ''}</span>
+      </div>`;
+
+    if (poll.is_active && !hasVoted) {
+      // Voting UI
+      const isMulti = poll.poll_type === 'multiple';
+      html += `<div class="vote-options" id="vote-options">`;
+      poll.options.forEach(o => {
+        html += `<div class="vote-option" onclick="toggleVoteOption(this, ${o.id}, ${isMulti})" data-oid="${o.id}">
+          <div class="vote-check ${isMulti ? 'vote-check-multi' : ''}"></div>
+          <span class="vote-option-text">${esc(o.option_text)}</span>
+        </div>`;
+      });
+      html += `</div><button class="btn-vote" id="btn-cast-vote" onclick="castVote(${pollId})" disabled>Cast Your Vote</button>`;
+    } else {
+      // Results UI
+      if (hasVoted && poll.is_active) html += `<div style="background:var(--green-light);color:var(--green);padding:10px 16px;border-radius:8px;font-size:14px;font-weight:600;margin-bottom:16px;display:inline-flex;align-items:center;gap:6px">✓ You voted</div>`;
+      html += `<div class="result-bars">`;
+      poll.options.forEach(o => {
+        const pct = totalVotes > 0 ? Math.round(o.vote_count / totalVotes * 100) : 0;
+        const isWinner = o.vote_count === maxVotes && o.vote_count > 0;
+        const isMyVote = myVotes.includes(o.id);
+        html += `<div class="result-bar-item ${isWinner ? 'winner' : ''}">
+          <div class="result-bar-fill" style="width:${pct}%"></div>
+          <div class="result-bar-content">
+            <span class="result-bar-label">${esc(o.option_text)}${isMyVote ? ' <span style="font-size:12px;color:var(--blue)">(your vote)</span>' : ''}</span>
+            <span class="result-bar-count"><span class="result-bar-votes">${o.vote_count}</span><span class="result-bar-pct">${pct}%</span></span>
+          </div>
+        </div>`;
+      });
+      html += `</div><div class="result-total">${totalVotes} total vote${totalVotes !== 1 ? 's' : ''} from ${poll.total_voters} voter${poll.total_voters !== 1 ? 's' : ''}</div>`;
+    }
+    html += `<div style="text-align:center;margin-top:28px"><button class="btn-proceed" onclick="navigate('poll-feed')">← Back to Polls</button></div>`;
+    container.innerHTML = html;
+
+    // Animate bars after render
+    setTimeout(() => {
+      container.querySelectorAll('.result-bar-fill').forEach(el => { el.style.width = el.style.width; });
+    }, 50);
+  } catch (err) { container.innerHTML = '<div style="color:var(--red)">Could not load poll.</div>'; }
+}
+
+let selectedOptions = new Set();
+function toggleVoteOption(el, optId, isMulti) {
+  if (!isMulti) {
+    document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+    selectedOptions.clear();
+  }
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    selectedOptions.delete(optId);
+  } else {
+    el.classList.add('selected');
+    selectedOptions.add(optId);
+  }
+  document.getElementById('btn-cast-vote').disabled = selectedOptions.size === 0;
+}
+
+async function castVote(pollId) {
+  if (selectedOptions.size === 0) return;
+  try {
+    await apiPost(`/polls/${pollId}/vote`, { user_id: currentUser.id, option_ids: [...selectedOptions] });
+    selectedOptions.clear();
+    showToast('Vote submitted! 🗳️', 'success');
+    await viewPoll(pollId); // Refresh to show results
+  } catch (err) { showToast(err.message || 'Error voting', 'error'); }
+}
+
+// ══════════════════════════════════════
+//  CREATE POLL
+// ══════════════════════════════════════
+function resetCreateForm() {
+  document.getElementById('create-title').value = '';
+  document.getElementById('create-desc').value = '';
+  newPollType = 'single';
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.toggle('active', b.dataset.type === 'single'));
+  document.getElementById('option-inputs').innerHTML = `
+    <div class="option-row"><input class="form-input" placeholder="Option 1"/><button class="btn-remove-opt" onclick="removeOption(this)" style="visibility:hidden">×</button></div>
+    <div class="option-row"><input class="form-input" placeholder="Option 2"/><button class="btn-remove-opt" onclick="removeOption(this)" style="visibility:hidden">×</button></div>`;
+}
+
+function selectPollType(type) {
+  newPollType = type;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.toggle('active', b.dataset.type === type));
+}
+
+function addOption() {
+  const container = document.getElementById('option-inputs');
+  const count = container.children.length + 1;
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.innerHTML = `<input class="form-input" placeholder="Option ${count}"/><button class="btn-remove-opt" onclick="removeOption(this)">×</button>`;
+  container.appendChild(row);
+  updateRemoveButtons();
+}
+
+function removeOption(btn) {
+  btn.parentElement.remove();
+  updateRemoveButtons();
+}
+
+function updateRemoveButtons() {
+  const rows = document.querySelectorAll('#option-inputs .option-row');
+  rows.forEach((r, i) => {
+    const btn = r.querySelector('.btn-remove-opt');
+    btn.style.visibility = rows.length <= 2 ? 'hidden' : 'visible';
+    r.querySelector('input').placeholder = `Option ${i + 1}`;
+  });
+}
+
+async function createPoll() {
+  const title = document.getElementById('create-title').value.trim();
+  const desc = document.getElementById('create-desc').value.trim();
+  const options = [...document.querySelectorAll('#option-inputs input')].map(i => i.value.trim()).filter(v => v);
+
+  if (!title) { showToast('Please enter a poll title', 'error'); return; }
+  if (options.length < 2) { showToast('Add at least 2 options', 'error'); return; }
+
+  try {
+    await apiPost(`/polls?user_id=${currentUser.id}`, { title, description: desc, poll_type: newPollType, options });
+    showToast('Poll created! 🎉', 'success');
+    navigate('poll-feed');
+  } catch (err) { showToast(err.message || 'Failed to create poll', 'error'); }
+}
+
+// ══════════════════════════════════════
+//  MY POLLS
+// ══════════════════════════════════════
+async function renderMyPolls() {
+  const polls = await apiGet(`/my-polls/${currentUser.id}`);
+  const list = document.getElementById('my-polls-list');
+  if (polls.length === 0) {
+    list.innerHTML = '<div class="empty-state"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><h3>No Polls Yet</h3><p>Create your first poll!</p><button class="btn-proceed" onclick="navigate(\'create-poll\')">+ Create Poll</button></div>';
+    return;
+  }
+  list.innerHTML = polls.map(p => `
+    <div class="my-poll-card">
+      <div class="my-poll-info">
+        <h3>${esc(p.title)}</h3>
+        <p><span class="poll-type-badge ${p.poll_type}" style="margin-right:8px">${p.poll_type}</span> ${p.total_voters} vote${p.total_voters !== 1 ? 's' : ''} · ${p.is_active ? '🟢 Active' : '🔴 Closed'}</p>
+      </div>
+      <div class="my-poll-actions">
+        <button class="btn-sm" onclick="viewPoll(${p.id})">View</button>
+        ${p.is_active
+          ? `<button class="btn-sm" onclick="closePoll(${p.id})">Close</button>`
+          : `<button class="btn-sm primary" onclick="reopenPoll(${p.id})">Reopen</button>`}
+        <button class="btn-sm danger" onclick="openDeletePollModal(${p.id}, '${esc(p.title).replace(/'/g,"\\'")}')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function closePoll(id) {
+  try { await apiPost(`/polls/${id}/close?user_id=${currentUser.id}`, {}); showToast('Poll closed', 'success'); renderMyPolls(); }
+  catch(e) { showToast('Failed to close poll', 'error'); }
+}
+
+async function reopenPoll(id) {
+  try { await apiPost(`/polls/${id}/reopen?user_id=${currentUser.id}`, {}); showToast('Poll reopened', 'success'); renderMyPolls(); }
+  catch(e) { showToast('Failed to reopen poll', 'error'); }
+}
+
+function openDeletePollModal(id, title) {
+  deletingPollId = id;
+  document.getElementById('modal-delete-poll-name').textContent = title;
+  openModal('modal-delete-poll');
+}
+
+async function confirmDeletePoll() {
+  try { await apiDelete(`/polls/${deletingPollId}?user_id=${currentUser.id}`); closeModal('modal-delete-poll'); showToast('Poll deleted', 'success'); renderMyPolls(); }
+  catch(e) { showToast('Failed to delete', 'error'); }
+}
+
+// ══════════════════════════════════════
+//  STUDENT SUBJECTS, PREFERENCES, RESULT
+// ══════════════════════════════════════
 async function renderSubjectsTable() {
-  const res = await fetch(API + '/subjects')
-  subjectsList = await res.json()
-  document.getElementById('subjects-tbody').innerHTML = subjectsList.map((s, i) => `
-    <tr>
-      <td class="td-num">${i+1}</td>
-      <td class="td-name">${s.name}</td>
-      <td>${s.total_seats}</td>
-      <td style="text-align:right"><span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;background:var(--green-light);color:var(--green);border-radius:8px;font-weight:700">${s.total_seats}</span></td>
-    </tr>`).join('')
+  await loadSubjects();
+  document.getElementById('subjects-tbody').innerHTML = subjects.map((s, i) => `
+    <tr><td class="td-num">${i+1}</td><td class="td-name">${s.name}</td><td><span class="seat-badge">${s.total_seats}</span></td></tr>`).join('');
 }
 
-// ══ PREFERENCES ══
 async function renderPreferences() {
-  const res = await fetch(API + '/subjects')
-  subjectsList = await res.json()
-  renderAvailable()
-  renderPrefList()
+  await loadSubjects();
+  try { const ps = await apiGet('/polling-status'); pollingOpen = ps.open; } catch(_) {}
+  renderAvailable();
+  renderPrefList();
 }
 
 function renderAvailable() {
-  const added = new Set(preferences)
-  document.getElementById('available-list').innerHTML = subjectsList.map(s => `
-    <div class="subject-row">
-      <span>${s.name}</span>
-      <button class="btn-add" onclick="addPref(${s.id})" ${added.has(s.id) ? 'disabled' : ''}>
-        ${added.has(s.id) ? 'Added' : 'Add'}
-      </button>
-    </div>`).join('')
+  const addedSet = new Set(preferences);
+  document.getElementById('available-list').innerHTML = subjects.map(s => `
+    <div class="subject-row"><span>${s.name}</span><button class="btn-add" onclick="addPref(${s.id})" ${addedSet.has(s.id)?'disabled':''}>${addedSet.has(s.id)?'Added':'Add'}</button></div>`).join('');
 }
 
 function renderPrefList() {
-  const container = document.getElementById('preference-list')
-  const empty = document.getElementById('pref-empty')
-  const btn = document.getElementById('btn-submit-pref')
-
-  container.querySelectorAll('.pref-item').forEach(el => el.remove())
-
-  if (preferences.length === 0) {
-    empty.style.display = 'flex'
-    btn.disabled = true
-    return
-  }
-
-  empty.style.display = 'none'
-  btn.disabled = submitted
-
+  const container = document.getElementById('preference-list');
+  const empty = document.getElementById('pref-empty');
+  const btn = document.getElementById('btn-submit-pref');
+  container.querySelectorAll('.pref-item').forEach(el => el.remove());
+  if (preferences.length === 0) { empty.style.display = 'flex'; btn.disabled = true; return; }
+  empty.style.display = 'none';
+  btn.disabled = !pollingOpen;
+  btn.textContent = submitted ? '✓ Saved — Click to Update' : '✓  Submit Preferences';
   preferences.forEach((sid, idx) => {
-    const subj = subjectsList.find(s => s.id === sid)
-    if (!subj) return
-    const item = document.createElement('div')
-    item.className = 'pref-item'
-    item.draggable = !submitted
-    item.dataset.id = sid
-    item.dataset.idx = idx
-    item.innerHTML = `
-      <span class="drag-handle">⠿</span>
-      <span class="pref-rank">${idx + 1}</span>
-      <span class="pref-name">${subj.name}</span>
-      <button class="btn-remove" onclick="removePref(${sid})">×</button>`
-    if (!submitted) {
-      item.addEventListener('dragstart', onDragStart)
-      item.addEventListener('dragover', onDragOver)
-      item.addEventListener('drop', onDrop)
-      item.addEventListener('dragend', onDragEnd)
-    }
-    container.appendChild(item)
-  })
+    const subj = subjects.find(s => s.id === sid); if (!subj) return;
+    const item = document.createElement('div');
+    item.className = 'pref-item'; item.draggable = true; item.dataset.id = sid; item.dataset.idx = idx;
+    item.innerHTML = `<span class="drag-handle">⠿</span><span class="pref-rank">${idx+1}</span><span class="pref-name">${subj.name}</span><button class="btn-remove" onclick="removePref(${sid})">×</button>`;
+    item.addEventListener('dragstart', onDragStart); item.addEventListener('dragover', onDragOver);
+    item.addEventListener('drop', onDrop); item.addEventListener('dragend', onDragEnd);
+    container.appendChild(item);
+  });
 }
 
-function addPref(id) {
-  if (!preferences.includes(id)) { preferences.push(id); renderAvailable(); renderPrefList() }
-}
-function removePref(id) {
-  preferences = preferences.filter(x => x !== id); renderAvailable(); renderPrefList()
-}
+function addPref(id) { if (!preferences.includes(id)) { preferences.push(id); submitted=false; renderAvailable(); renderPrefList(); } }
+function removePref(id) { preferences = preferences.filter(x => x !== id); submitted=false; renderAvailable(); renderPrefList(); }
 
-let dragSrcIdx = null
-function onDragStart(e) { dragSrcIdx = +this.dataset.idx; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move' }
-function onDragOver(e) { e.preventDefault() }
-function onDrop(e) {
-  e.preventDefault()
-  const targetIdx = +this.dataset.idx
-  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return
-  const moved = preferences.splice(dragSrcIdx, 1)[0]
-  preferences.splice(targetIdx, 0, moved)
-  renderPrefList()
-}
-function onDragEnd() { this.classList.remove('dragging'); dragSrcIdx = null }
+let dragSrcIdx = null;
+function onDragStart(e) { dragSrcIdx = +this.dataset.idx; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function onDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function onDrop(e) { e.preventDefault(); const t = +this.dataset.idx; if (dragSrcIdx===null||dragSrcIdx===t) return; const m = preferences.splice(dragSrcIdx,1)[0]; preferences.splice(t,0,m); submitted=false; renderPrefList(); }
+function onDragEnd() { this.classList.remove('dragging'); dragSrcIdx = null; }
 
 async function submitPreferences() {
-  if (preferences.length === 0) return
+  if (preferences.length === 0 || !pollingOpen) return;
   try {
-    const res = await fetch(API + '/preferences', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ student_id: currentUser.id, preferences: preferences })
-    })
-    const data = await res.json()
-    if (data.status === 'saved') {
-      submitted = true
-      renderPrefList()
-      showToast('Preferences submitted! ✓', 'success')
-      setTimeout(() => navigate('dashboard'), 1200)
-    }
-  } catch(e) {
-    showToast('Error submitting preferences')
-  }
+    await apiPost('/preferences', { student_id: currentUser.id, preferences });
+    submitted = true; renderPrefList();
+    showToast('Preferences submitted! ✔️', 'success');
+    setTimeout(() => navigate('dashboard'), 1200);
+  } catch (err) { showToast('Error saving preferences', 'error'); }
 }
 
-// ══ STUDENT RESULT ══
 async function renderResult() {
-  const card = document.getElementById('result-card')
+  const card = document.getElementById('result-card');
   try {
-    const res = await fetch(`http://127.0.0.1:8000/result/${currentUser.id}`)
-    const data = await res.json()
+    const data = await apiGet(`/result/${currentUser.id}`);
     if (data.allocated) {
-      card.innerHTML = `
-        <div class="result-icon success"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="result-title">You've been allocated!</div>
-        <div class="result-desc">Your subject has been assigned based on your CGPA and preferences.</div>
-        <div class="allocated-badge">📚 ${data.subject_name}</div><br/><br/>
-        <button class="btn-return" onclick="navigate('dashboard')">Return to Dashboard</button>`
+      card.innerHTML = `<div class="result-icon success"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="result-title">You've Been Allocated!</div><div class="result-desc">Your subject has been assigned based on your preferences and CGPA.</div>
+        <div class="allocated-badge">📚 ${data.subject_name}</div><button class="btn-return" onclick="navigate('dashboard')">Return to Dashboard</button>`;
     } else {
-      card.innerHTML = `
-        <div class="result-icon pending"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="result-title">Result Not Available Yet</div>
-        <div class="result-desc">The admin hasn't run the allocation yet, or you have not been allocated.</div>
-        <button class="btn-return" onclick="navigate('dashboard')">Return to Dashboard</button>`
+      card.innerHTML = `<div class="result-icon pending"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="result-title">Not Available Yet</div><div class="result-desc">The admin hasn't run the allocation yet, or your preferences weren't submitted.</div>
+        <button class="btn-return" onclick="navigate('dashboard')">Return to Dashboard</button>`;
     }
-  } catch(e) {
-    card.innerHTML = `<div class="result-title">Could not load result</div>`
-  }
+  } catch (err) { card.innerHTML = '<div style="color:var(--red)">Could not load result.</div>'; }
 }
 
-// ══ ADMIN SUBJECTS ══
+// ══════════════════════════════════════
+//  ADMIN
+// ══════════════════════════════════════
+async function renderAdminDashboard() {
+  try { const ps = await apiGet('/polling-status'); pollingOpen = ps.open; document.getElementById('polling-toggle').checked = pollingOpen; updatePollingUI(); } catch(_) {}
+}
+
+async function togglePolling() {
+  pollingOpen = document.getElementById('polling-toggle').checked;
+  try { await apiPost('/polling-status', { open: pollingOpen }); updatePollingUI(); showToast(pollingOpen ? 'Polling opened' : 'Polling closed', 'success'); }
+  catch(e) { pollingOpen = !pollingOpen; document.getElementById('polling-toggle').checked = pollingOpen; showToast('Failed', 'error'); }
+}
+
+function updatePollingUI() {
+  const label = document.getElementById('admin-polling-label'), dot = document.getElementById('admin-polling-dot'), text = document.getElementById('admin-polling-text'), desc = document.getElementById('admin-polling-desc');
+  if (pollingOpen) { label.className='polling-label open'; dot.className='polling-dot open'; text.textContent='Open'; desc.textContent='Students can submit preferences'; }
+  else { label.className='polling-label closed'; dot.className='polling-dot closed'; text.textContent='Closed'; desc.textContent='Polling is closed'; }
+}
+
 async function renderAdminSubjects() {
-  const res = await fetch(API + '/subjects')
-  subjectsList = await res.json()
-  document.getElementById('admin-subjects-tbody').innerHTML = subjectsList.map((s, i) => `
-    <tr>
-      <td class="td-num">${i+1}</td>
-      <td class="td-name">${s.name}</td>
-      <td style="text-align:center">${s.total_seats}</td>
-      <td class="actions-cell">
-        <button class="btn-icon edit" onclick="openSeatsModal(${s.id}, '${s.name}', ${s.total_seats})">✎</button>
-        <button class="btn-icon danger" onclick="deleteSubject(${s.id})">🗑</button>
-      </td>
-    </tr>`).join('')
+  await loadSubjects();
+  document.getElementById('admin-subjects-tbody').innerHTML = subjects.map((s, i) => `
+    <tr><td class="td-num">${i+1}</td><td class="td-name">${s.name}</td><td style="text-align:center"><span class="seat-badge">${s.total_seats}</span></td>
+    <td><div class="actions-cell">
+      <button class="btn-icon edit" onclick="openEditModal(${s.id})" title="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+      <button class="btn-icon danger" onclick="openDeleteModal(${s.id},'${s.name.replace(/'/g,"\\'")}')" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+    </div></td></tr>`).join('');
 }
 
-function openAddModal() {
-  editingSubjectId = null
-  document.getElementById('modal-subject-title').textContent = 'Add Subject'
-  document.getElementById('modal-subject-name').value = ''
-  document.getElementById('modal-subject-seats').value = ''
-  openModal('modal-subject')
-}
+function openAddModal() { editingSubjectId=null; document.getElementById('modal-subject-title').textContent='Add Subject'; document.getElementById('modal-subject-name').value=''; document.getElementById('modal-subject-seats').value=''; openModal('modal-subject'); }
+function openEditModal(id) { const s=subjects.find(s=>s.id===id); if(!s) return; editingSubjectId=id; document.getElementById('modal-subject-title').textContent='Edit Subject'; document.getElementById('modal-subject-name').value=s.name; document.getElementById('modal-subject-seats').value=s.total_seats; openModal('modal-subject'); }
+async function saveSubject() { const n=document.getElementById('modal-subject-name').value.trim(),s=parseInt(document.getElementById('modal-subject-seats').value); if(!n){showToast('Enter name','error');return;} if(!s||s<1){showToast('Enter valid seats','error');return;} try { if(editingSubjectId) await apiPut(`/subjects/${editingSubjectId}`,{name:n,total_seats:s}); else await apiPost('/subjects',{name:n,total_seats:s}); closeModal('modal-subject'); showToast(editingSubjectId?'Updated':'Added','success'); await renderAdminSubjects(); } catch(e){showToast('Failed','error');} }
+function openDeleteModal(id,name) { deletingSubjectId=id; document.getElementById('modal-delete-name').textContent=name; openModal('modal-delete'); }
+async function confirmDelete() { try { await apiDelete(`/subjects/${deletingSubjectId}`); closeModal('modal-delete'); showToast('Deleted','success'); await renderAdminSubjects(); } catch(e){showToast('Failed','error');} }
 
-async function saveSubject() {
-  const name = document.getElementById('modal-subject-name').value.trim()
-  const seats = parseInt(document.getElementById('modal-subject-seats').value)
-  if (!name || !seats || seats < 1) { showToast('Fill in all fields'); return }
+function renderAllocPage() { document.getElementById('alloc-warning').style.display = pollingOpen ? 'flex' : 'none'; }
 
-  if (editingSubjectId) {
-    await fetch(API + '/subjects/' + editingSubjectId, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ total_seats: seats })
-    })
-  } else {
-    await fetch(API + '/subjects', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, total_seats: seats })
-    })
-  }
-  closeModal('modal-subject')
-  renderAdminSubjects()
-  showToast(editingSubjectId ? 'Subject updated' : 'Subject added', 'success')
-}
-
-async function deleteSubject(id) {
-  if (!confirm('Delete this subject?')) return
-  await fetch(API + '/subjects/' + id, { method: 'DELETE' })
-  renderAdminSubjects()
-  showToast('Subject deleted')
-}
-
-function openSeatsModal(id, name, seats) {
-  editingSeatsId = id
-  document.getElementById('modal-seats-subj-name').textContent = name
-  document.getElementById('modal-seats-value').value = seats
-  openModal('modal-seats')
-}
-
-async function saveSeats() {
-  const val = parseInt(document.getElementById('modal-seats-value').value)
-  if (!val || val < 1) { showToast('Enter valid seat count'); return }
-  await fetch(API + '/subjects/' + editingSeatsId, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ total_seats: val })
-  })
-  closeModal('modal-seats')
-  renderAdminSubjects()
-  showToast('Seats updated', 'success')
-}
-
-// ══ ADMIN ALLOCATION ══
 async function runAllocation() {
-  const btn = document.getElementById('btn-run-alloc')
-  btn.disabled = true
-  btn.textContent = 'Running...'
-  try {
-    const res = await fetch(API + '/allocate', { method: 'POST' })
-    const data = await res.json()
-    showToast('Allocation complete! ✓', 'success')
-    setTimeout(() => navigate('admin-results'), 800)
-  } catch(e) {
-    showToast('Allocation failed — check backend')
-  }
-  btn.disabled = false
-  btn.textContent = '▶ Run Allocation'
+  const btn = document.getElementById('btn-run-alloc'); btn.disabled = true;
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.8s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Running…';
+  try { await apiPost('/allocate', {}); showToast('Allocation complete! ✓', 'success'); setTimeout(() => navigate('admin-results'), 800); }
+  catch(e) { showToast('Failed', 'error'); }
+  finally { btn.disabled = false; btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run Allocation'; }
 }
 
-// ══ ADMIN RESULTS ══
 async function renderAdminResults() {
-  const content = document.getElementById('admin-results-content')
-  content.innerHTML = '<p style="color:var(--gray-400);padding:20px">Loading...</p>'
+  const content = document.getElementById('admin-results-content');
   try {
-    const res = await fetch(API + '/results')
-    const rows = await res.json()
-    if (rows.length === 0) {
-      content.innerHTML = `<div style="background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:60px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--gray-500);margin-bottom:8px">No Results Yet</div><p style="color:var(--gray-400);margin-bottom:24px">Run the allocation algorithm first.</p><button class="btn-proceed" onclick="navigate('admin-allocation')">Go to Allocation</button></div>`
-      return
+    const rows = await apiGet('/results');
+    const alloc = rows.filter(r => r.subject_name).length, unalloc = rows.length - alloc;
+    if (rows.length === 0 || alloc === 0) {
+      content.innerHTML = '<div class="empty-state"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><h3>No Results Yet</h3><p>Run the allocation algorithm first.</p><button class="btn-proceed" onclick="navigate(\'admin-allocation\')">Go to Allocation</button></div>';
+      return;
     }
+    const rate = Math.round(alloc/rows.length*100);
     content.innerHTML = `
-      <div class="results-stats-grid">
-        <div class="stat-card"><div class="stat-label">Students Allocated</div><div class="stat-value">${rows.length}</div></div>
-        <div class="stat-card"><div class="stat-label">Status</div><div class="stat-value" style="font-size:18px;color:var(--green)">Complete</div></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Allocated</div><div class="stat-value">${alloc}/${rows.length}</div><div class="stat-sub">${rate}% success</div></div>
+        <div class="stat-card"><div class="stat-label">Unallocated</div><div class="stat-value" style="color:${unalloc>0?'var(--red)':'var(--green)'}">${unalloc}</div><div class="stat-sub">${unalloc===0?'All placed ✓':'Check preferences'}</div></div>
+        <div class="stat-card"><div class="stat-label">Total Students</div><div class="stat-value">${rows.length}</div></div>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>#</th><th>Student Name</th><th>Allocated Subject</th><th style="text-align:right">Status</th></tr></thead>
-          <tbody>${rows.map((r, i) => `
-  <tr>
-    <td class="td-name">${r.student_name}</td>
-<td>${r.subject_name ?? '—'}</td>
-<td style="text-align:right"><span class="alloc-result-badge ${r.subject_name ? 'allocated' : 'unallocated'}">${r.subject_name ? 'Allocated' : 'Unallocated'}</span></td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
-      </div>`
-  } catch(e) {
-    content.innerHTML = '<p style="color:red;padding:20px">Failed to load results</p>'
-  }
+      <div class="table-wrap"><table><thead><tr><th style="width:50px">#</th><th>Student</th><th>CGPA</th><th>Subject</th><th style="text-align:right">Status</th></tr></thead><tbody>
+      ${rows.map((r,i) => `<tr><td class="td-num">${i+1}</td><td class="td-name">${r.student_name}</td>
+        <td><span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--blue)">${r.cgpa||'—'}</span></td>
+        <td>${r.subject_name||'<span style="color:var(--gray-400)">—</span>'}</td>
+        <td style="text-align:right"><span class="alloc-result-badge ${r.subject_name?'allocated':'unallocated'}">${r.subject_name?'Allocated':'Unallocated'}</span></td></tr>`).join('')}
+      </tbody></table></div>`;
+  } catch(e) { content.innerHTML = '<div style="color:var(--red)">Could not load results.</div>'; }
 }
 
-// ══ MODALS ══
-function openModal(id) { document.getElementById(id).classList.add('open') }
-function closeModal(id) { document.getElementById(id).classList.remove('open') }
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open') })
-})
-async function clearAllocations() {
-  if (!confirm('Clear all allocations?')) return
-  await fetch(API + '/clear-allocations', { method: 'POST' })
-  showToast('Allocations cleared')
-  renderAdminResults()
-}
+// ══════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => { el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); }); });
 
-// ══ TOAST ══
-let toastTimer = null
-function showToast(msg, type = '') {
-  const t = document.getElementById('toast')
-  t.textContent = msg
-  t.className = 'toast show' + (type ? ' ' + type : '')
-  clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => { t.className = 'toast' }, 3000)
-}
+let toastTimer = null;
+function showToast(msg, type = '') { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (type ? ' ' + type : ''); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.className = 'toast'; }, 3000); }
+
+function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 </script>
 </body>
 </html>
