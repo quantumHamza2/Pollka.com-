@@ -3,6 +3,7 @@ import sqlite3
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from passwords import hash_password, verify_password
 from typing import Optional
 
 app = FastAPI()
@@ -10,7 +11,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -76,7 +77,7 @@ def register(data: RegisterRequest):
         raise HTTPException(status_code=400, detail="Username already taken")
     cursor.execute(
         "INSERT INTO users (username, password, display_name, email, role) VALUES (?, ?, ?, ?, 'user')",
-        (data.username, data.password, data.display_name, data.email)
+        (data.username, hash_password(data.password), data.display_name, data.email)
     )
     new_id = cursor.lastrowid
     conn.commit()
@@ -89,12 +90,16 @@ def login(data: LoginRequest):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT * FROM users WHERE username=? AND password=?",
-        (data.username, data.password)
+        "SELECT * FROM users WHERE username=?",
+        (data.username,)
     )
     user = cursor.fetchone()
+    valid = user is not None and verify_password(data.password, user["password"])
+    if valid and not user["password"].startswith("pbkdf2_sha256$"):
+        cursor.execute("UPDATE users SET password=? WHERE id=?", (hash_password(data.password), user["id"]))
+        conn.commit()
     conn.close()
-    if user:
+    if valid:
         return {
             "status": "success",
             "id": user["id"],
@@ -243,6 +248,11 @@ def reopen_poll(poll_id: int, user_id: int):
     if not row:
         conn.close()
         raise HTTPException(status_code=404, detail="Poll not found")
+    cursor.execute("SELECT role FROM users WHERE id=?", (user_id,))
+    user_row = cursor.fetchone()
+    if row["created_by"] != user_id and (not user_row or user_row["role"] != "admin"):
+        conn.close()
+        raise HTTPException(status_code=403, detail="Not authorized")
     cursor.execute("UPDATE polls SET is_active=1 WHERE id=?", (poll_id,))
     conn.commit()
     conn.close()
@@ -266,6 +276,14 @@ def cast_vote(poll_id: int, data: VoteRequest):
     if not poll["is_active"]:
         conn.close()
         raise HTTPException(status_code=400, detail="Poll is closed")
+
+    if not data.option_ids or len(set(data.option_ids)) != len(data.option_ids):
+        conn.close()
+        raise HTTPException(status_code=400, detail="Select at least one option; duplicate options are not allowed")
+    cursor.execute("SELECT id FROM users WHERE id=?", (data.user_id,))
+    if not cursor.fetchone():
+        conn.close()
+        raise HTTPException(status_code=400, detail="Unknown voter")
 
     # Remove previous votes by this user on this poll
     cursor.execute("DELETE FROM votes WHERE poll_id=? AND user_id=?", (poll_id, data.user_id))

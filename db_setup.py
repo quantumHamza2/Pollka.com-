@@ -1,6 +1,7 @@
 import sqlite3
+from pathlib import Path
 
-conn = sqlite3.connect("pollka.db")
+conn = sqlite3.connect(Path(__file__).with_name("pollka.db"))
 cursor = conn.cursor()
 
 # Enable foreign key support
