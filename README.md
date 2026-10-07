@@ -1,3 +1,5 @@
+> **Local demo only:** Passwords registered through the API now use salted PBKDF2; legacy demo accounts upgrade when they next log in. This does **not** make the application production-ready: endpoints still trust client-supplied user IDs and require server-authenticated sessions and authorization before public deployment. Never use real passwords with legacy seed data. Duplicate/empty vote selections are rejected and reopening polls now checks ownership.
+
 # Pollka.com
 
 Pollka.com is a full-stack polling and allocation platform. It features a general-purpose polling system supporting user registration, poll creation, single/multiple-choice voting, and live results visualization. Additionally, the platform integrates an academic elective subject allocation engine that assigns elective courses to students based on their ranked preferences and CGPA standings.
